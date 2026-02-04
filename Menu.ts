@@ -4,8 +4,8 @@ import { Colors } from './src/util/Colors'
 let opcao: number
 //menu do while
 do {
-    console.log(Colors.bg.black, Colors.fg.yellow,
-        '*****************************************\n')
+    console.log(Colors.bg.green, Colors.fg.yellow,
+        '*****************************************          \n')
     console.log('          BANCO DO BRAZIL COM Z            ')
     console.log('\n*****************************************\n')
     console.log('1 - criar conta')
@@ -17,7 +17,8 @@ do {
     console.log('7 - Depositar')
     console.log('8 - Transferir')
     console.log('9 - Sair')
-    console.log('                                                ',
+    console.log('*****************************************      ')
+    console.log('                                               ',
         Colors.reset)
 
     opcao = leia.questionInt(Colors.fg.blue + 'Escolha a opcao: ' + Colors.reset)
