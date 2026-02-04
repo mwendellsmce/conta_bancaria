@@ -1,6 +1,6 @@
-import leia from "readline-sync"
 import { Colors } from './src/util/Colors'
 import { Conta } from "./src/model/Conta";
+import { Input } from "./src/util/Input";
 
 let opcao: number
 
@@ -24,7 +24,7 @@ c1.depositar(500)
 c1.visualizar
 
 do {
-    console.log(Colors.bg.green, Colors.fg.yellow, 
+    console.log(Colors.bg.black, Colors.fg.yellow, 
                     '*****************************************************')
         console.log('                                                     ')
         console.log('                BANCO DO BRAZIL COM Z                ')
@@ -45,7 +45,7 @@ do {
         console.log('                                                     ', 
         Colors.reset)
 
-    opcao = leia.questionInt(Colors.fg.blue + 'Escolha a opcao: ' + Colors.reset)
+    opcao = Input.questionInt(Colors.fg.blue + 'Escolha a opcao: ' + Colors.reset)
 
     switch (opcao) {
         case 1:
@@ -104,5 +104,5 @@ function sobre(): void {
 }
 function pause(): void {
     console.log('Pressione enter para continuar: ')
-    leia.prompt()
+    Input.prompt()
 }
