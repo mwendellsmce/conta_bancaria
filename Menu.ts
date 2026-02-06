@@ -1,10 +1,11 @@
 import { Colors } from './src/util/Colors'
 import { Conta } from "./src/model/Conta";
 import { Input } from "./src/util/Input";
+import { ContaCorrente } from './src/model/ContaCorrente';
 
 let opcao: number
-
-//instaciar objetos da classe conta
+/*
+instaciar objetos da classe conta
 
 const c1 = new Conta(1, 1234, "Sofia", 1, 100000.00);
 
@@ -22,6 +23,12 @@ console.log('Depositar 500: ')
 c1.depositar(500)
 
 c1.visualizar
+*/
+// teste de classe conta corrente
+
+const cc1 = new ContaCorrente(2, 5678, 'Bianca', 1, 200000.00, 2000);
+cc1.agencia = 123
+console.log(cc1)
 
 do {
     console.log(Colors.bg.black, Colors.fg.yellow, 
