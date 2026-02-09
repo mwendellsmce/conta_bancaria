@@ -58,6 +58,7 @@ do {
     console.log('            6 - Sacar                                ')
     console.log('            7 - Depositar                            ')
     console.log('            8 - Transferir valores entre Contas      ')
+    console.log('            9 - Procurar conta por nome do titular   ')
     console.log('            0 - Sair                                 ')
     console.log('                                                     ')
     console.log('*****************************************************')
@@ -94,6 +95,7 @@ do {
             break
         case 6:
             console.log(Colors.fg.green, 'Sacar', Colors.reset)
+            sacar()
             pause()
 
             break
@@ -234,6 +236,32 @@ function deletarContaPorNumero(): void {
         console.log('Operação Cancelada!')
     }
 }
+
+function sacar(): void {
+    console.log(Colors.fg.greenstrong, 
+        '\nSaque', 
+        Colors.reset);
+
+    console.log("Digite o número da conta: ");
+    const numero = Input.questionInt("");
+
+    const conta = contas.buscarNoArray(numero);
+
+    if (conta !== null) {
+        console.log("Digite o valor do saque: ");
+        const valor = Input.questionFloat("");
+
+        // Chama o método sacar do Controller que já faz a validação de saldo
+        contas.sacar(numero, valor); 
+    } else {
+        console.log(Colors.fg.red, 
+            `\nA Conta número ${numero} não foi encontrada!`, 
+            Colors.reset);
+    }
+}
+
+
+
 function sobre(): void {
     console.log(Colors.fg.greenstrong, '\nProjeto desenvolvido por Marcus Wendell', Colors.reset)
 }
