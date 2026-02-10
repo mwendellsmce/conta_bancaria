@@ -271,8 +271,8 @@ function transferir(): void{
         console.log(Colors.fg.red, `A Conta de Destino número ${numeroDestino} não foi encontrada!`, Colors.reset);
 
     }else{
-        console.log("Digite o valor da Transferência: ");
-        const valor = Input.questionFloat("");
+        console.log('Digite o valor da Transferência: ');
+        const valor = Input.questionFloat('');
 
         contas.transferir(numeroOrigem, numeroDestino, valor);
     }
@@ -281,8 +281,8 @@ function transferir(): void{
 function procurarPorTitular(): void{
 
     // Solicita o nome do titular
-    console.log("'Digite o Nome do Titular: ");
-    const titular = Input.question("");
+    console.log('Digite o Nome do Titular: ');
+    const titular = Input.question('');
 
     // Localiza a conta a partir do nome do titular
     contas.procurarPorTitular(titular);
@@ -303,8 +303,8 @@ function criarContasTeste(): void {
     contas.cadastrar(new ContaCorrente(contas.gerarNumero(), 4578, 'João da Silva', 1, 1000.00, 100.00));
 
     // Instâncias da Classe ContaPoupança
-    contas.cadastrar(new ContaPoupanca(contas.gerarNumero(), 5789, "Geana Almeida", 2, 10000, 10));
-    contas.cadastrar(new ContaPoupanca(contas.gerarNumero(), 5698, "Jean Lima", 2, 15000, 15));
+    contas.cadastrar(new ContaPoupanca(contas.gerarNumero(), 5789, 'Geana Almeida', 2, 10000, 10));
+    contas.cadastrar(new ContaPoupanca(contas.gerarNumero(), 5698, 'Jean Lima', 2, 15000, 15));
 
 }
 
