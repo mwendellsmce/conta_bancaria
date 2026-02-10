@@ -1,9 +1,9 @@
 import { Colors } from './src/util/Colors'
-import { Conta } from "./src/model/Conta";
 import { Input } from "./src/util/Input";
 import { ContaCorrente } from './src/model/ContaCorrente';
 import { ContaController } from './src/controller/ContaController';
 import { ContaPoupanca } from './src/model/ContaPoupanca';
+import { formatarMoeda } from "./src/util/Currency";
 
 // criar um objeto global da classe ContaController
 const contas = new ContaController();
@@ -12,32 +12,6 @@ const contas = new ContaController();
 const tiposContas = ['Conta Corrente', 'Conta Poupança']
 
 let opcao: number
-/*
-instaciar objetos da classe conta
-
-const c1 = new Conta(1, 1234, "Sofia", 1, 100000.00);
-
-//teste metodo sacar
-console.log('Sacar 100.00: ', c1.sacar(100));
-console.log('Sacar 200000.00', c1.sacar(200000));
-console.log('Sacar 0:', c1.sacar(0));
-
-//teste do metodo depositar
-
-console.log('Depositar -10: ')
-c1.depositar(-10)
-
-console.log('Depositar 500: ')
-c1.depositar(500)
-
-c1.visualizar
-*/
-/* teste de classe conta corrente
-
-const cc1 = new ContaCorrente(2, 5678, 'Bianca', 1, 200000.00, 2000);
-cc1.agencia = 123
-console.log(cc1)
-*/
 
 // teste
 criarContasTeste();
@@ -75,12 +49,12 @@ do {
             break
         case 2:
             console.log(Colors.fg.green, 'Listando todas as contas', Colors.reset)
-            contas.listarTodas()
+            listarTodasContas()            
             pause()
             break
         case 3:
             console.log(Colors.fg.green, 'Buscando conta por numero', Colors.reset)
-            buscaContaPorNumero();
+            buscaContaPorNumero()
             pause()
             break
         case 4:
@@ -101,11 +75,19 @@ do {
             break
         case 7:
             console.log(Colors.fg.green, 'Depositar', Colors.reset)
+            depositar()
             pause()
 
             break
         case 8:
             console.log(Colors.fg.green, 'Transferir', Colors.reset)
+            transferir()
+            pause()
+
+            break
+        case 9:
+            console.log(Colors.fg.green,`\nProcurar Conta por Nome do Titular\n`, Colors.reset)
+            procurarPorTitular()
             pause()
 
             break
@@ -144,11 +126,13 @@ function criarConta() {
             contas.cadastrar(new ContaPoupanca(contas.gerarNumero(), agencia, titular, tipo, saldo, aniversario))
             break
     }
-    console.log('Digite o limite da conta: ')
-
-    console.log('Digite o dia do aniversario da conta: ')
-
 }
+
+// op 2 listar todas as contas
+function listarTodasContas(): void{
+    contas.listarTodas();
+}
+
 
 // op 3 buscar conta por numero
 function buscaContaPorNumero(): void {
@@ -163,6 +147,7 @@ function atualizarConta(): void {
     const numero = Input.questionInt('')
     const conta = contas.buscarNoArray(numero)
 
+    // se a conta existir
     if (conta !== null) {
 
         // guarda os valores atuais da conta
@@ -175,18 +160,16 @@ function atualizarConta(): void {
         console.log(`\nAgencia Atual: ${agencia}`)
         console.log('Digite o número da nova agencia \n (Pressione ENTER para manter o valor atual')
         let entrada = Input.question('')
-
         agencia = entrada.trim() === '' ? agencia : parseInt(entrada)
 
         // atualizacao do titular
         console.log(`\nNome do atual titular: ${titular}`)
         console.log('Digite o novo nome do titular \n (Pressione ENTER para manter o valor atual')
         entrada = Input.question('')
-
         titular = entrada.trim() === '' ? titular : entrada
 
         // atualizacao do saldo
-        console.log(`\nSaldo Atual: ${saldo}`)
+        console.log(`\n${formatarMoeda(saldo)}`)
         console.log('Digite o número do novo saldo \n (Pressione ENTER para manter o valor atual')
         entrada = Input.question('')
 
@@ -198,7 +181,7 @@ function atualizarConta(): void {
                 let limite = (conta as ContaCorrente).limite
 
                 // atualizacao do limite
-                console.log(`\nLimite Atual: ${limite}`)
+                console.log(`\nLimite Atual: ${formatarMoeda(limite)}`)
                 console.log('Digite o número do novo limite \n (Pressione ENTER para manter o valor atual')
                 entrada = Input.question('')
 
@@ -213,9 +196,7 @@ function atualizarConta(): void {
                 // atualizacao do aniversario
                 console.log(`\nAniversario Atual: ${aniversario}`)
                 console.log('Digite o novo dia do aniversario \n (Pressione ENTER para manter o valor atual')
-
                 entrada = Input.question('')
-
                 aniversario = entrada.trim() === '' ? aniversario : parseInt(entrada)
                 contas.atualizar(new ContaPoupanca(numero, agencia, titular, tipo, saldo, aniversario))
                 break
@@ -225,7 +206,7 @@ function atualizarConta(): void {
     }
 }
 
-// op 5 deletar con por numero
+// op 5 deletar conta por numero
 function deletarContaPorNumero(): void {
     console.log('Digite o número da conta: ')
     const numero = Input.questionInt('')
@@ -238,29 +219,74 @@ function deletarContaPorNumero(): void {
 }
 
 function sacar(): void {
-    console.log(Colors.fg.greenstrong, 
-        '\nSaque', 
-        Colors.reset);
+    console.log('Digite o número da conta: ')
+    const numero = Input.questionInt('')
+    
+    const conta = contas.buscarNoArray(numero)
 
-    console.log("Digite o número da conta: ");
-    const numero = Input.questionInt("");
+    if(conta !== null){
+        console.log('Digite o valor do saque: ')
+        const valor = Input.questionFloat('')
 
-    const conta = contas.buscarNoArray(numero);
-
-    if (conta !== null) {
-        console.log("Digite o valor do saque: ");
-        const valor = Input.questionFloat("");
-
-        // Chama o método sacar do Controller que já faz a validação de saldo
-        contas.sacar(numero, valor); 
-    } else {
-        console.log(Colors.fg.red, 
-            `\nA Conta número ${numero} não foi encontrada!`, 
-            Colors.reset);
+        contas.sacar(numero, valor)
+    }else{
+        console.log(Colors.fg.red, `A conta número ${numero} não foi encontrada!`, Colors.reset)
     }
 }
 
+function depositar(): void{
 
+    console.log('Digite o número da conta: ')
+    const numero = Input.questionInt('')
+    
+    const conta = contas.buscarNoArray(numero)
+
+    if(conta !== null){
+        console.log('Digite o valor do depósito: ')
+        const valor = Input.questionFloat('')
+
+        contas.depositar(numero, valor)
+    }else{
+        console.log(Colors.fg.red, `A conta número ${numero} não foi encontrada!`, Colors.reset)
+    }
+}
+
+function transferir(): void{
+
+    console.log('Digite o número da Conta de Origem: ')
+    const numeroOrigem = Input.questionInt('')
+
+    console.log('Digite o número da Conta de Destino: ')
+    const numeroDestino = Input.questionInt("")
+
+    const contaOrigem = contas.buscarNoArray(numeroOrigem);
+    const contaDestino = contas.buscarNoArray(numeroDestino);
+
+    if(contaOrigem === null){
+
+        console.log(Colors.fg.red, `A Conta de Origem número ${numeroOrigem} não foi encontrada!`, Colors.reset);
+
+    }else if(contaDestino === null)    {
+
+        console.log(Colors.fg.red, `A Conta de Destino número ${numeroDestino} não foi encontrada!`, Colors.reset);
+
+    }else{
+        console.log("Digite o valor da Transferência: ");
+        const valor = Input.questionFloat("");
+
+        contas.transferir(numeroOrigem, numeroDestino, valor);
+    }
+}
+
+function procurarPorTitular(): void{
+
+    // Solicita o nome do titular
+    console.log("'Digite o Nome do Titular: ");
+    const titular = Input.question("");
+
+    // Localiza a conta a partir do nome do titular
+    contas.procurarPorTitular(titular);
+}
 
 function sobre(): void {
     console.log(Colors.fg.greenstrong, '\nProjeto desenvolvido por Marcus Wendell', Colors.reset)
@@ -281,3 +307,4 @@ function criarContasTeste(): void {
     contas.cadastrar(new ContaPoupanca(contas.gerarNumero(), 5698, "Jean Lima", 2, 15000, 15));
 
 }
+
